@@ -10,8 +10,8 @@ import Foundation
 
 struct Stock: Codable {
     private let date: String
-    let opening: Double
-    let closing: Double
+    let uOpen: Double
+    let uClose: Double
     var day: String {
         return date.components(separatedBy: "-")[2]
     }
@@ -24,15 +24,16 @@ struct Stock: Codable {
     
 
     private static func getStocks() -> [Stock] {
-        guard let fileName = Bundle.main.path(forResource: "applstockinfo", ofType: "jsong") else {fatalError()}
+        guard let fileName = Bundle.main.path(forResource: "applstockinfo", ofType: "json") else {fatalError()}
         let fileURL = URL(fileURLWithPath: fileName)
         do {
             let data = try Data(contentsOf: fileURL)
             let stocks = try JSONDecoder().decode([Stock].self, from: data)
             return stocks
         } catch {
-            fatalError()
+            print(error)
         }
+        return [Stock]()
     }
     
     static func getStocksSortedByMonthAndYear() -> [StocksByMonthAndYear] {
@@ -92,7 +93,7 @@ struct StocksByMonthAndYear {
     
     func getMonthAverage() -> Double {
         return stocks.reduce(0, { (intermediateResult, stock) -> Double in
-            intermediateResult + stock.opening
+            intermediateResult + stock.uOpen
         }) / Double(stocks.count)
     }
 }

@@ -15,6 +15,7 @@ class StocksTableViewController: UIViewController {
     @IBOutlet weak var stocksTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        stocksTableView.dataSource = self
         loadData()
     }
     
@@ -42,7 +43,7 @@ extension StocksTableViewController: UITableViewDataSource {
         let stock = stocks[indexPath.section].stocks[indexPath.row]
         let cell = stocksTableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath)
         cell.textLabel?.text = "\(stock.day) \(stock.month) \(stock.year)"
-        cell.detailTextLabel?.text = "\(stock.opening)"
+        cell.detailTextLabel?.text = "\(stock.uOpen)"
         return cell
     }
 }

@@ -26,7 +26,7 @@ class UsersTableViewController: UIViewController {
         guard searchedText != "" else {
             return users
         }
-        return users.filter{ $0.name.fullName.lowercased().contains(searchedText.lowercased())
+        return users.filter{ ($0.name.fullName!.lowercased().contains(searchedText.lowercased()))
         }
     }
     
@@ -35,8 +35,9 @@ class UsersTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadUsers()
+//        loadUsers()
         userTableView.dataSource = self
+        usersSearchBar.delegate = self
     }
     
     private func loadUsers() {
@@ -53,8 +54,8 @@ extension UsersTableViewController: UITableViewDataSource {
         let user = users[indexPath.row]
         
         let subtitleCell = userTableView.dequeueReusableCell(withIdentifier: "subtitleCell", for: indexPath)
-        subtitleCell.textLabel?.text = user.name.fullName.capitalized
-        subtitleCell.detailTextLabel?.text = user.location.address
+        subtitleCell.textLabel?.text = user.name.fullName?.capitalized
+        subtitleCell.detailTextLabel?.text = "Address: \(user.location)"
         return subtitleCell
     }
 }
@@ -62,5 +63,6 @@ extension UsersTableViewController: UITableViewDataSource {
 extension UsersTableViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchedText = searchText
+        loadUsers()
     }
 }
